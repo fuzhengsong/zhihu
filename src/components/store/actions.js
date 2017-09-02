@@ -100,5 +100,21 @@ export default {
         }
       })
     })
+  },
+
+  //更新当前头部日期信息的列表
+  computeHeaderPosition({commit,state},data){
+    let headers = [];
+    data.forEach(function(item){
+      let header;
+      let position = item.getBoundingClientRect().top + window.pageYOffset || document.documentElement.scrollTop;
+      let text = item.firstChild.firstChild.nodeValue;
+      header = {
+        'position' : position,
+        'text' : text
+      };
+      headers.push(header);
+    });
+    commit(types.UPDATE_HEADER_INFO,headers)
   }
 };

@@ -95,9 +95,9 @@
           reject()
         });
       });
-        Promise.all([p1,p2]).then(()=> {
-          next()
-        });
+      Promise.all([p1,p2]).then(()=> {
+        next()
+      });
     },
 
     beforeRouteEnter(to, from, next){

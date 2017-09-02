@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import 'less/newsList.less'
+  import 'less/newsList.less';
   import {
     mapGetters,
     mapActions

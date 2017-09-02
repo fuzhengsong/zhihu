@@ -8,7 +8,8 @@ import store from './components/store';
 import 'mint-ui/lib/style.css'
 import './assets/font/iconfont.css'
 import './filter';
-import './components/common'
+import './components/common';
+import './directive';
 
 Vue.config.productionTip = false;
 Vue.use(MintUi);
@@ -20,4 +21,4 @@ new Vue({
   store,
   template: '<App/>',
   components: { App }
-})
+});

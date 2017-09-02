@@ -19,7 +19,8 @@ const state = {
     preId:'',
     currentId:'',
     nextId:''
-  }
+  },
+  headers: []
 };
 
 const getters = {
@@ -27,7 +28,8 @@ const getters = {
   getRecommendInfo:(state) => state.recommendData,
   getLastestList:(state) => state.lists,
   getLoadingState:(state) => state.loading,
-  getNewsId:(state) => state.newsId
+  getNewsId:(state) => state.newsId,
+  getHeaderInfo:(state) => state.headers
 };
 
 const mutations = {
@@ -59,6 +61,11 @@ const mutations = {
   //更新新闻id
   [types.UPDATE_NEW_ID](state,data){
     state.newsId = Object.assign({},state.newsId,data)
+  },
+
+  // 更新标题列表
+  [types.UPDATE_HEADER_INFO](state,data){
+    state.headers = data;
   }
 };
 

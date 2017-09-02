@@ -2,9 +2,12 @@
   <div id="zh-index">
     <div class="zh-header" :style="{background:bgc}">
       <i class="iconfont icon-category"></i>
-      <h1 class="zh-hot-title">今日热闻</h1>
+      <h1 class="zh-hot-title" >今日热闻</h1>
     </div>
-    <div class="zh-swipe">
+    <div class="zh-header" style="background-color:rgb(52, 152, 219);z-index:1000" v-show="currentTitle">
+      <h1 class="zh-hot-title" >{{currentTitle}}</h1>
+    </div>
+    <div class="zh-swipe" >
       <mt-swipe :auto="4000">
         <mt-swipe-item v-for="item in recommendInfo" :key="item.id">
           <img class='swp-img' :src="item.image" :alt="item.title">
@@ -21,9 +24,9 @@
             v-infinite-scroll="loadMore"
             infinite-scroll-disabled="loading"
             infinite-scroll-distance="300">
-          <li v-for="item in lists">
-            <div class="item-header" v-if="item && item.date!=='today' ">
-              {{item.date | Date}}
+          <li v-for="item,index in lists">
+            <div class="header-wrap" ref="fixedHeader" v-if="item && item.date!=='today'">
+              <div class="item-header">{{item.date | Date}}</div>
             </div>
             <news-list
               :lists="item.Data">
@@ -47,6 +50,9 @@
       return {
         bgc: '',
         articleId: [],
+        vm: this,
+        currentTitle: '',
+        isheadershow: false
       }
     },
     computed: {
@@ -55,16 +61,27 @@
         recommendInfo: 'getRecommendInfo',
         lists: 'getLastestList',
         loading: 'getLoadingState',
-        newsId: 'getNewsId'
+        newsId: 'getNewsId',
+        headerInfo : 'getHeaderInfo'
       })
+    },
+    watch:{
+      lists(){
+        this.$nextTick(function(){
+          if(this.$refs && this.$refs.fixedHeader){
+            this.computeHeaderPosition(this.$refs.fixedHeader)
+          }
+        })
+      }
     },
     methods: {
       ...mapActions({
         setRequestDate: 'setRequestDate',
         ajaxData: 'requestLastData',
-        loadTopData: 'loadTopData',
+//        loadTopData: 'loadTopData',
         loadMore: 'loadMoreData',
-        computedNewId: 'computedNewId'
+        computedNewId: 'computedNewId',
+        computeHeaderPosition:'computeHeaderPosition'
       }),
       // 节流阀函数
       toggle(func, delay){
@@ -118,10 +135,22 @@
       this.setRequestDate(date);
       //头部背景变化 监听
       window.addEventListener('scroll', this.toggle(function () {
-        let top = document.body.scrollTop;
+        let top = window.pageYOffset || document.documentElement.scrollTop;
         _this.bgc = `rgba(52, 152, 219, ${top / 223})`;
         if (_this.opa > 1) {
           _this.bgc = 'rgba(52, 152, 219, 1)';
+        }
+        if(_this.headerInfo){
+          debugger
+          let currentHeader,
+          currentPosition = 0;
+          _this.headerInfo.forEach(function(item){
+            if(item.position < top && item.position > currentPosition){
+              currentHeader = item.text;
+              currentPosition = item.position;
+            }
+          });
+          _this.currentTitle = currentHeader;
         }
       }, 0))
     }
