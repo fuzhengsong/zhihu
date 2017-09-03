@@ -1,13 +1,26 @@
 <template>
-  <div id="new-detail" v-if="detail&&detail.title">
-    <div class="new-detail-recommend">
-      <img class='swp-img' :src="detail.image" :alt="detail.title">
-      <div class="swp-text">
-        <p class="text">{{detail.title}}</p>
+  <div id="detail">
+    <mt-loadmore :top-method="loadTop"
+                 :topPullText="topPull"
+                 :topDropText="topDrop"
+                 bottomPullText="载入下一篇"
+                 :maxDistance=50
+                 :topDistance=40
+                 ref="loadmore"
+    >
+      <div class="place-holder"></div>
+      <div id="new-detail" v-if="detail&&detail.title">
+        <div class="new-detail-recommend">
+          <img class='swp-img' :src="detail.image" :alt="detail.title">
+          <div class="swp-text">
+            <p class="text">{{detail.title}}</p>
+          </div>
+          <div class="swp-cover"></div>
+        </div>
+        <div class="new-detail-body" v-html="detail.body"></div>
       </div>
-      <div class="swp-cover"></div>
-    </div>
-    <div class="new-detail-body" v-html="detail.body"></div>
+      <div class="place-holder-bottom"></div>
+    </mt-loadmore>
     <zh-footer
       :params="$route.query.nextId"
       :extra="story_extra"
@@ -17,52 +30,72 @@
 
 <script>
   import axios from 'axios';
+  import {
+    mapGetters,
+    mapActions
+  } from 'vuex';
   export default{
     data(){
       return {
         detail: {},
-        story_extra: {}
+        story_extra: {},
+        topDrop:''
+      }
+    },
+    computed:{
+      ...mapGetters({
+        newsId: 'getNewsId'
+      }),
+      // 判断路由中是否有上一篇的id
+      topPull(){
+        let preid = this.$route.query.preId;
+        if(!preid){
+          this.topDrop = '已经是第一篇了';
+          return '已经是第一篇了'
+        }else{
+          this.topDrop = '释放更新';
+          return '载入上一篇'
+        }
+
       }
     },
     created(){
-//      this.ajaxData();
     },
-//    watch: {
-//      '$route'(to, from){
-////        this.ajaxData()
-//      }
-//    },
     methods: {
-//      ajaxData(){
-//        let paramID;
-//        paramID = this.$route.params.id;
-//        axios.get('./api/news/' + paramID).then(data => {
-//          this.includeLinkStyle(data.data.css[0], data);
-//        }).catch(err =>{
-//
-//        });
-//        axios.get('/api/story-extra/'+paramID).then(data =>{
-//          this.story_extra = data.data;
-//        }).catch(err =>{
-//
-//        })
-//      },
-//
-//      //动态添加css
-//      includeLinkStyle: function (url, data) {
-//        var _this = this;
-//        var link = document.createElement('link');
-//        link.rel = 'stylesheet';
-//        link.type = 'text/css';
-//        link.href = url;
-//        let firstChild = document.getElementsByTagName('head')[0].firstElementChild;
-//        document.getElementsByTagName('head')[0].insertBefore(link, firstChild);
-//        link.onload = function () {
-//          _this.detail = data.data;
-//        }
-//      }
+      ...mapActions({
+        computedNewId: 'computedNewId'
+      }),
+      //上拉加载上一篇文章
+      loadTop(){
+        let preid = this.$route.query.preId;
+        if(preid) {
+          this.computedNewId(this.$route.query.preId);
+          this.$nextTick(() => {
+            this.$router.push({
+              name: 'newDetail',
+              params: {id: this.$route.query.preId},
+              query: {preId: this.newsId.preId, nextId: this.newsId.nextId}
+            });
+          });
+        }
+        this.$refs.loadmore.onTopLoaded();
+      },
+     /* loadBottom(){
+        let nextId = this.$route.query.nextId;
+        if(nextId){
+        this.computedNewId(this.$route.query.nextId);
+          this.$nextTick(() =>{
+            this.$router.push({
+              name: 'newDetail',
+              params:{id:this.$route.query.nextId},
+              query: {preId: this.newsId.preId, nextId: this.newsId.nextId}
+            })
+          });
+        }
+        this.$refs.loadmore.onBottomLoaded();
+      },*/
     },
-    beforeRouteUpdate (to,from,next){
+    beforeRouteUpdate (to, from, next){
       var _this = this;
       let paramID,
         detail,
@@ -78,7 +111,7 @@
           document.getElementsByTagName('head')[0].insertBefore(link, firstChild);
           link.onload = function () {
             detail = data.data;
-            _this.detail = Object.assign({},_this.detail,detail);
+            _this.detail = Object.assign({}, _this.detail, detail);
             resolve()
           }
         }).catch(err => {
@@ -86,16 +119,16 @@
         });
       });
 
-      let p2 = new Promise(function (resolve,reject) {
+      let p2 = new Promise(function (resolve, reject) {
         axios.get('/api/story-extra/' + paramID).then(data => {
           story_extra = data.data;
-          _this.story_extra =Object.assign({},_this.story_extra,story_extra);
+          _this.story_extra = Object.assign({}, _this.story_extra, story_extra);
           resolve()
         }).catch(err => {
           reject()
         });
       });
-      Promise.all([p1,p2]).then(()=> {
+      Promise.all([p1, p2]).then(() => {
         next()
       });
     },
@@ -122,7 +155,7 @@
         });
       });
 
-      let p2 = new Promise(function (resolve,reject) {
+      let p2 = new Promise(function (resolve, reject) {
         axios.get('/api/story-extra/' + paramID).then(data => {
           story_extra = data.data;
           resolve()
@@ -130,7 +163,7 @@
           reject()
         });
       });
-      Promise.all([p1,p2]).then(()=>{
+      Promise.all([p1, p2]).then(() => {
         next(vm => {
           vm.detail = detail;
           vm.story_extra = story_extra;
@@ -142,12 +175,40 @@
 </script>
 <style lang="less" rel="stylesheet/less">
   @import '../../assets/less/common';
-
+  .place-holder-bottom{
+    .px2rem(height,50);
+  }
+  .place-holder{
+    .px2rem(height,50);
+    .px2rem(margin-top,-50);
+  }
+  #detail {
+    .mint-loadmore-top{
+      position: absolute;
+      left:0;
+      top:0;
+      z-index:100;
+      width:100%;
+      margin-top:0;
+      .mint-loadmore-text{
+        color:#fff;
+      }
+    }
+   /* .mint-loadmore-bottom{
+      position: absolute;
+      left:0;
+      bottom:0;
+      width:100%;
+      margin-bottom:0;
+    }*/
+  }
   .new-detail-recommend {
     position: absolute;
     overflow: hidden;
+    left:0;
+    top:0;
     width: 100%;
-    .px2rem(height, 200);
+    .px2rem(height, 250);
     .swp-img {
       position: absolute;
       width: 100%;

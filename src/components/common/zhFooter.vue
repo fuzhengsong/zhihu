@@ -55,7 +55,8 @@
             name: 'newDetail',
             params:{id:this.$route.query.nextId},
             query: {preId: this.newsId.preId, nextId: this.newsId.nextId}
-          })
+          });
+          window.scrollTo(0,0);
         })
       }
     }

@@ -18,7 +18,7 @@
         </mt-swipe-item>
       </mt-swipe>
     </div>
-    <mt-loadmore :top-method="loadTop" ref="loadmore">
+    <mt-loadmore :top-method="loadTop" ref="loadmore" >
       <div class="zh-news-list">
         <ul class="lists"
             v-infinite-scroll="loadMore"
@@ -140,8 +140,8 @@
         if (_this.opa > 1) {
           _this.bgc = 'rgba(52, 152, 219, 1)';
         }
+        // 头部文字的更新
         if(_this.headerInfo){
-          debugger
           let currentHeader,
           currentPosition = 0;
           _this.headerInfo.forEach(function(item){
