@@ -45,7 +45,10 @@
             params: {id: item.id},
             query: {preId: this.newsId.preId, nextId: this.newsId.nextId}
           });
-        })
+        });
+        //记录当前位置
+        let position = window.pageYOffset || document.documentElement.scrollTop;
+        this.$store.commit('RECORD_SCROLL_POSITION',position)
       }
     }
   };

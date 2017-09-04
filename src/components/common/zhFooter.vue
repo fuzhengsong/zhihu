@@ -46,7 +46,7 @@
         computedNewId: 'computedNewId'
       }),
       goBack(){
-        this.$router.go(-1);
+        this.$router.push({name:'zhIndex',params:{'position':this.$store.state.newslist.scrollPosition}});
       },
       nextNew(){
         this.computedNewId(this.$route.query.nextId);
@@ -56,7 +56,6 @@
             params:{id:this.$route.query.nextId},
             query: {preId: this.newsId.preId, nextId: this.newsId.nextId}
           });
-          window.scrollTo(0,0);
         })
       }
     }

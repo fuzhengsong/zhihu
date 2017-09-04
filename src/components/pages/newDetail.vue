@@ -3,7 +3,6 @@
     <mt-loadmore :top-method="loadTop"
                  :topPullText="topPull"
                  :topDropText="topDrop"
-                 bottomPullText="载入下一篇"
                  :maxDistance=50
                  :topDistance=40
                  ref="loadmore"
@@ -102,7 +101,7 @@
         story_extra;
       paramID = to.params.id;
       let p1 = new Promise(function (resolve, reject) {
-        axios.get('./api/news/' + paramID).then(data => {
+        axios.get('/api/news/' + paramID).then(data => {
           var link = document.createElement('link');
           link.rel = 'stylesheet';
           link.type = 'text/css';

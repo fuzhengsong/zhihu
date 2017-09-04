@@ -4,8 +4,11 @@ import * as components from '../components';
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  mode:'history',
   scrollBehavior(to,from,savedPosition){
+    if(to.name === 'zhIndex'){
+      return{x: 0, y: to.params.position}
+    }
     if (savedPosition) {
       return savedPosition
     } else {

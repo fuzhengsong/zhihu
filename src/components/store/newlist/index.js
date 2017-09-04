@@ -20,7 +20,8 @@ const state = {
     currentId:'',
     nextId:''
   },
-  headers: []
+  headers: [],
+  scrollPosition: 0   //进入详情页后记录当前滚动位置
 };
 
 const getters = {
@@ -66,6 +67,9 @@ const mutations = {
   // 更新标题列表
   [types.UPDATE_HEADER_INFO](state,data){
     state.headers = data;
+  },
+  ['RECORD_SCROLL_POSITION'](state,data){
+    state.scrollPosition = data;
   }
 };
 
