@@ -46,7 +46,7 @@
         computedNewId: 'computedNewId'
       }),
       goBack(){
-        this.$router.push({name:'zhIndex'});
+        this.$router.go(-1);
       },
       nextNew(){
         this.computedNewId(this.$route.query.nextId);
