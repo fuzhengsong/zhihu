@@ -10,6 +10,7 @@ import './assets/font/iconfont.css';
 import './filter';
 import './components/common';
 import './directive';
+import '../static/css/reset.css';
 
 Vue.config.productionTip = false;
 Vue.use(MintUi);

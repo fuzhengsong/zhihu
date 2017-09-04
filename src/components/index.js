@@ -9,3 +9,6 @@ export const Index = resolve => require.ensure([], () => resolve(require('./page
 
 //详情页
 export const newsDetail = resolve => require.ensure([], () => resolve(require('./pages/newDetail.vue')),'./pages/newDetail');
+
+//评论
+export const Comment = resolve => require.ensure([], () => resolve(require('./pages/comment.vue')),'./pages/comment');

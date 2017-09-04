@@ -100,6 +100,7 @@
         detail,
         story_extra;
       paramID = to.params.id;
+
       let p1 = new Promise(function (resolve, reject) {
         axios.get('/api/news/' + paramID).then(data => {
           var link = document.createElement('link');
@@ -138,7 +139,7 @@
         story_extra;
       paramID = to.params.id;
       let p1 = new Promise(function (resolve, reject) {
-        axios.get('./api/news/' + paramID).then(data => {
+        axios.get('/api/news/' + paramID).then(data => {
           var link = document.createElement('link');
           link.rel = 'stylesheet';
           link.type = 'text/css';

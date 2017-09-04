@@ -14,9 +14,9 @@
     <div class="icon">
       <i class="iconfont icon-fenxiang"></i>
     </div>
-    <div class="icon">
+    <div class="icon" @click="toComments">
       <i class="iconfont icon-liuyan"></i>
-      <span class="news_detail_comment">{{extra.short_comments}}</span>
+      <span class="news_detail_comment">{{extra.comments}}</span>
     </div>
   </div>
 </template>
@@ -49,13 +49,29 @@
         this.$router.push({name:'zhIndex',params:{'position':this.$store.state.newslist.scrollPosition}});
       },
       nextNew(){
+        //更新store中的id
         this.computedNewId(this.$route.query.nextId);
+
+        // 计算出下一篇文章的id信息后 执行路由跳转 不然store中的id没有更新就跳转会出错
         this.$nextTick(() =>{
           this.$router.push({
             name: 'newDetail',
-            params:{id:this.$route.query.nextId},
+            params:{id: this.$route.query.nextId},
             query: {preId: this.newsId.preId, nextId: this.newsId.nextId}
           });
+        })
+      },
+      toComments(){
+        this.$router.push({
+          name: 'newComments',
+          params: {
+            id: this.$route.params.id,
+          },
+          query:{
+            comments: this.extra.comments,
+            longComments: this.extra.long_comments,
+            shortComments: this.extra.short_comments
+          }
         })
       }
     }

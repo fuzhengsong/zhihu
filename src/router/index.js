@@ -36,6 +36,11 @@ export default new Router({
       path: '/newDetail/:id',
       name: 'newDetail',
       component: components.newsDetail
+    },
+    {
+      path: '/newComments/:id',
+      name: 'newComments',
+      component: components.Comment
     }
   ]
 })
