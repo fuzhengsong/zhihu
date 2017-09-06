@@ -89,16 +89,28 @@
         computedNewId: 'computedNewId',
         computeHeaderPosition:'computeHeaderPosition'
       }),
-
+      prevent(event){
+        // 判断默认行为是否可以被禁用
+        if (event.cancelable) {
+          // 判断默认行为是否已经被禁用
+          if (!event.defaultPrevented) {
+            event.preventDefault();
+          }
+        }
+      },
       //主题的显示隐藏
       themesShow(){
         this.isThemesShow = !this.isThemesShow;
         if(!this.isThemesShow){
           this.$refs.zhThemes.$el.style.transform = 'translate(0,0)';
           this.$refs.zhIndex.style.transform = 'translate(0,0)';
+          document.removeEventListener('touchmove',this.prevent,{ passive: false });
         }else{
           this.$refs.zhThemes.$el.style.transform = 'translate(100%,0)';
           this.$refs.zhIndex.style.transform = 'translate(55%,0)';
+//          document.documentElement.style.overflow='hidden';
+//          document.body.style.overflow='hidden';
+          document.addEventListener('touchmove',this.prevent,{ passive: false });
         }
       },
       // 节流阀函数
