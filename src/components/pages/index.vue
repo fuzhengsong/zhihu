@@ -116,6 +116,7 @@
           params: {id:id},
           query: {preId: this.newsId.preId, nextId: this.newsId.nextId}
         });
+        this.$store.commit('RECORD_SCROLL_POSITION',0)
       },
 
       //下拉更新

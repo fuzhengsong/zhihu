@@ -3,7 +3,7 @@
     <header class="comment-header">
       {{comments}}&nbsp;条点评
     </header>
-    <div class="long-comment comments" v-if="longCommentsList.length>0">
+    <div class="long-comment comments" v-if="longCommentsList && longCommentsList.length>0">
       <div class="title">
         {{longComments}}&nbsp;条长评
       </div>
@@ -22,7 +22,7 @@
         </li>
       </ul>
     </div>
-    <div class="short-comment comments" ref="shotComment" v-if="shortCommentsList.length > 0">
+    <div class="short-comment comments" ref="shotComment" v-if="shortCommentsList && shortCommentsList.length > 0">
       <div class="title" @click="showShortComments">
         <div class="title-left">
           {{shortComments}}&nbsp;条短评
