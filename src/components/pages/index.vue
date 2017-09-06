@@ -2,7 +2,7 @@
     <div id="zh-index">
       <zh-themes ref="zhThemes"></zh-themes>
       <div class="index-wrap" ref="zhIndex">
-        <div class="index-cover" v-show="isThemesShow" @click="themesShow" ref></div>
+        <div class="index-cover" v-show="isThemesShow" @click="themesShow"></div>
         <div class="zh-header" :style="{background:bgc}">
           <i class="iconfont icon-category" @click="themesShow"></i>
           <h1 class="zh-hot-title" >今日热闻</h1>
@@ -104,6 +104,8 @@
         if(!this.isThemesShow){
           this.$refs.zhThemes.$el.style.transform = 'translate(0,0)';
           this.$refs.zhIndex.style.transform = 'translate(0,0)';
+//          document.documentElement.style.overflow='auto';
+//          document.body.style.overflow='auto';
           document.removeEventListener('touchmove',this.prevent,{ passive: false });
         }else{
           this.$refs.zhThemes.$el.style.transform = 'translate(100%,0)';

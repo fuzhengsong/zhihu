@@ -20,21 +20,23 @@
         <p  class="name">设置</p>
       </div>
     </div>
-    <div class="themes-lists">
-      <div class="indexPage list">
-        <i class="iconfont icon-shouyexian"></i>
-        <span class="name">首页</span>
-        <i class="iconfont icon-jiantou"></i>
+    <div class="themes-lists" ref="themesLists">
+      <div class="content">
+        <div class="indexPage list">
+          <i class="iconfont icon-shouyexian"></i>
+          <span class="name">首页</span>
+          <i class="iconfont icon-jiantou"></i>
+        </div>
+        <ul>
+          <li class="list" v-for="item in themesList">
+            <p class="name">{{item.name}}</p>
+            <div class="icon">
+              <i class="iconfont icon-iconfont707"></i>
+              <i class="iconfont icon-jiantou" v-if="false"></i>
+            </div>
+          </li>
+        </ul>
       </div>
-      <ul>
-        <li class="list" v-for="item in themesList">
-          <p class="name">{{item.name}}</p>
-          <div class="icon">
-            <i class="iconfont icon-iconfont707"></i>
-            <i class="iconfont icon-jiantou" v-if="false"></i>
-          </div>
-        </li>
-      </ul>
     </div>
     <div class="themes-footer" ref="themesFoot">
       <div class="complete">
@@ -52,6 +54,7 @@
 <script>
   import 'less/themes.less';
   import axios from 'axios';
+  import BScroll from 'better-scroll';
   export default{
     data(){
       return{
@@ -62,9 +65,18 @@
     created(){
       axios.get('/api/themes').then(data =>{
         this.themesList = data.data.others;
+        this.$nextTick(() =>{
+          let scroll = new BScroll(this.$refs.themesLists,{
+            scrollY: true
+          })
+        });
       }).catch(err =>{
 
-      })
+      });
+
+    },
+    mounted(){
+
     }
   };
 </script>
