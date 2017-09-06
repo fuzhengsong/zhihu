@@ -3,7 +3,7 @@
 
 #themes{
   position: fixed;
-  left:0;
+  left:-55%;
   top:0;
   bottom:0;
   width:55%;
@@ -11,6 +11,8 @@
   box-sizing: border-box;
   background-color: #212121;
   z-index:1001;
+  transform:translate(0,0);
+  transition: transform .3s ease;
   .themes-header{
     .flexbox();
     .px2rem(height,40);
@@ -76,12 +78,12 @@
     }
   }
   .themes-footer{
-    position: fixed;
+    position: absolute;
     .flexbox();
     left:0;
     bottom:0;
     .px2rem(height,50);
-    width:55%;
+    width:100%;
     background-color: #212121;
     color:@second-font-color;
     >div{

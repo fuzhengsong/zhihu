@@ -1,41 +1,45 @@
 <template>
     <div id="zh-index">
-      <zh-themes></zh-themes>
-      <div class="zh-header" :style="{background:bgc}">
-        <i class="iconfont icon-category"></i>
-        <h1 class="zh-hot-title" >今日热闻</h1>
-      </div>
-      <div class="zh-header" style="background-color:rgb(52, 152, 219);z-index:1000" v-show="currentTitle">
-        <h1 class="zh-hot-title" >{{currentTitle}}</h1>
-      </div>
-      <div class="zh-swipe" >
-        <mt-swipe :auto="4000">
-          <mt-swipe-item v-for="item in recommendInfo" :key="item.id">
-            <img class='swp-img' :src="item.image" :alt="item.title">
-            <div class="swp-text" @click="pushTo(item.id)">
-              <p class="text">{{item.title}}</p>
-            </div>
-            <div class="swp-cover" @click="pushTo(item.id)"></div>
-          </mt-swipe-item>
-        </mt-swipe>
-      </div>
-      <mt-loadmore :top-method="loadTop" ref="loadmore" >
-        <div class="zh-news-list">
-          <ul class="lists"
-              v-infinite-scroll="loadMore"
-              infinite-scroll-disabled="loading"
-              infinite-scroll-distance="300">
-            <li v-for="item,index in lists">
-              <div class="header-wrap" ref="fixedHeader" v-if="item && item.date!=='today'">
-                <div class="item-header">{{item.date | Date}}</div>
-              </div>
-              <news-list
-                :lists="item.Data">
-              </news-list>
-            </li>
-          </ul>
+      <zh-themes ref="zhThemes"></zh-themes>
+      <div class="index-wrap" ref="zhIndex">
+        <div class="index-cover" v-show="isThemesShow" @click="themesShow" ref></div>
+        <div class="zh-header" :style="{background:bgc}">
+          <i class="iconfont icon-category" @click="themesShow"></i>
+          <h1 class="zh-hot-title" >今日热闻</h1>
         </div>
-      </mt-loadmore>
+        <div class="zh-header" style="background-color:rgb(52, 152, 219);z-index:1000" v-show="currentTitle">
+          <h1 class="zh-hot-title" >{{currentTitle}}</h1>
+        </div>
+        <div class="zh-swipe" >
+          <mt-swipe :auto="4000">
+            <mt-swipe-item v-for="item in recommendInfo" :key="item.id">
+              <img class='swp-img' :src="item.image" :alt="item.title">
+              <div class="swp-text" @click="pushTo(item.id)">
+                <p class="text">{{item.title}}</p>
+              </div>
+              <div class="swp-cover" @click="pushTo(item.id)"></div>
+            </mt-swipe-item>
+          </mt-swipe>
+        </div>
+        <mt-loadmore :top-method="loadTop" ref="loadmore" >
+          <div class="zh-news-list">
+            <ul class="lists"
+                v-infinite-scroll="loadMore"
+                infinite-scroll-disabled="loading"
+                infinite-scroll-distance="300">
+              <li v-for="item,index in lists">
+                <div class="header-wrap" ref="fixedHeader" v-if="item && item.date!=='today'">
+                  <div class="item-header">{{item.date | Date}}</div>
+                </div>
+                <news-list
+                  :lists="item.Data">
+                </news-list>
+              </li>
+            </ul>
+          </div>
+        </mt-loadmore>
+      </div>
+
     </div>
 </template>
 
@@ -53,7 +57,8 @@
         articleId: [],
         vm: this,
         currentTitle: '',
-        isheadershow: false
+        isheadershow: false,
+        isThemesShow: false
       }
     },
     computed: {
@@ -84,6 +89,18 @@
         computedNewId: 'computedNewId',
         computeHeaderPosition:'computeHeaderPosition'
       }),
+
+      //主题的显示隐藏
+      themesShow(){
+        this.isThemesShow = !this.isThemesShow;
+        if(!this.isThemesShow){
+          this.$refs.zhThemes.$el.style.transform = 'translate(0,0)';
+          this.$refs.zhIndex.style.transform = 'translate(0,0)';
+        }else{
+          this.$refs.zhThemes.$el.style.transform = 'translate(100%,0)';
+          this.$refs.zhIndex.style.transform = 'translate(55%,0)';
+        }
+      },
       // 节流阀函数
       toggle(func, delay){
         var timeout,

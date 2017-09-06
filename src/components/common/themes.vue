@@ -36,7 +36,7 @@
         </li>
       </ul>
     </div>
-    <div class="themes-footer">
+    <div class="themes-footer" ref="themesFoot">
       <div class="complete">
         <i class="iconfont icon-xiazai"></i>
         <span class="name">完成</span>
