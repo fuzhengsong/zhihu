@@ -1,5 +1,6 @@
 <template>
     <div id="zh-index">
+      <zh-themes></zh-themes>
       <div class="zh-header" :style="{background:bgc}">
         <i class="iconfont icon-category"></i>
         <h1 class="zh-hot-title" >今日热闻</h1>
